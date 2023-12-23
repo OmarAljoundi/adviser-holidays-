@@ -20,50 +20,49 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FunctionComponent } from "react";
 
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: { destination: string };
-// }): Promise<Metadata> {
-//   const response = (await getDestination())?.results?.find(
-//     (x) => x.slug == decodeURIComponent(params.destination) && x.is_active
-//   );
-//   if (!response) {
-//     return {
-//       title: "No destination found",
-//     };
-//   }
+export async function generateMetadata({
+  params,
+}: {
+  params: { destination: string };
+}): Promise<Metadata> {
+  const response = (await getDestination())?.results?.find(
+    (x) => x.slug == decodeURIComponent(params.destination) && x.is_active
+  );
+  if (!response) {
+    return {
+      title: "No destination found",
+    };
+  }
 
-//   const { description, tags, title } = response.seo || {
-//     title: "",
-//     description: "",
-//     tags: "",
-//   };
-//   return {
-//     metadataBase: new URL(process.env.NEXT_PUBLIC_URL!),
-//     title: title,
-//     description: description,
-//     openGraph: {
-//       title: title,
-//       description: description,
-//       type: "website",
-//       siteName: "Adviser holidays",
-//     },
-//     keywords: tags,
-//   };
-// }
-
-// export async function generateStaticParams() {
-//   const response = await getDestination();
-//   if (response.success && response.results && response.results.length > 0) {
-//     return response.results
-//       .filter((x) => x.is_active)
-//       .map((dest) => ({
-//         destination: `${dest.slug}`,
-//       }));
-//   }
-//   return [];
-// }
+  const { description, tags, title } = response.seo || {
+    title: "",
+    description: "",
+    tags: "",
+  };
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_URL!),
+    title: title,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      type: "website",
+      siteName: "Adviser holidays",
+    },
+    keywords: tags,
+  };
+}
+export async function generateStaticParams() {
+  const response = await getDestination();
+  if (response.success && response.results && response.results.length > 0) {
+    return response.results
+      .filter((x) => x.is_active)
+      .map((dest) => ({
+        destination: `${dest.slug}`,
+      }));
+  }
+  return [];
+}
 
 const TourDestinationListingPage: FunctionComponent<{
   params: { destination: string };
