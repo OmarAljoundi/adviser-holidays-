@@ -11,49 +11,49 @@ import TourHotels from "./tour-hotels";
 import TourRelated from "./tour-related";
 import { Metadata } from "next";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const response = (await getTours())?.find(
-    (x) => x.slug == decodeURIComponent(params.slug) && x.is_active
-  );
-  if (!response) {
-    return {
-      title: "No tour found",
-    };
-  }
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { slug: string };
+// }): Promise<Metadata> {
+//   const response = (await getTours())?.find(
+//     (x) => x.slug == decodeURIComponent(params.slug) && x.is_active
+//   );
+//   if (!response) {
+//     return {
+//       title: "No tour found",
+//     };
+//   }
 
-  const { description, tags, title } = response.seo || {
-    title: "",
-    description: "",
-    tags: "",
-  };
-  return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_URL!),
-    title: title,
-    description: description,
-    openGraph: {
-      title: title,
-      description: description,
-      type: "website",
-      siteName: "Adviser holidays",
-    },
-    keywords: tags,
-  };
-}
-export async function generateStaticParams() {
-  const response = await getTours();
-  if (response && response.length > 0) {
-    return response
-      .filter((x) => x.is_active)
-      .map((tour) => ({
-        slug: `${tour.slug}`,
-      }));
-  }
-  return [];
-}
+//   const { description, tags, title } = response.seo || {
+//     title: "",
+//     description: "",
+//     tags: "",
+//   };
+//   return {
+//     metadataBase: new URL(process.env.NEXT_PUBLIC_URL!),
+//     title: title,
+//     description: description,
+//     openGraph: {
+//       title: title,
+//       description: description,
+//       type: "website",
+//       siteName: "Adviser holidays",
+//     },
+//     keywords: tags,
+//   };
+// }
+// export async function generateStaticParams() {
+//   const response = await getTours();
+//   if (response && response.length > 0) {
+//     return response
+//       .filter((x) => x.is_active)
+//       .map((tour) => ({
+//         slug: `${tour.slug}`,
+//       }));
+//   }
+//   return [];
+// }
 
 const TourPage: FunctionComponent<{ params: { slug: string } }> = async ({
   params,
