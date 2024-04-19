@@ -19,7 +19,7 @@ const TourInitailInfo: FunctionComponent<TourInitailInfoProps> = ({ tour }) => {
           </IconTourProvider>
           <h1 className="text-sm sm:text-base"> بالغ في غرفة مزدوجة</h1>
           <h4 className="font-bold text-lg md:text-xl">
-            {tour.price_double} ر.ع
+            {tour.price_double} USD
           </h4>
         </div>
         <div className="grid space-y-2 justify-items-center border  bg-gray-200 rounded-medium p-2 md:p-4 gap-x-2 h-full items-start">
@@ -31,7 +31,7 @@ const TourInitailInfo: FunctionComponent<TourInitailInfoProps> = ({ tour }) => {
             <span className="font-bold pr-1">(2 - 12 سنة)</span>
           </h1>
           <h4 className="font-bold text-lg md:text-xl">
-            {tour.price_single} ر.ع
+            {tour.price_single} USD
           </h4>
         </div>
       </div>

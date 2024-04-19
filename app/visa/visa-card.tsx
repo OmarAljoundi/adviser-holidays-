@@ -11,7 +11,9 @@ interface VisaCardProps {
 const VisaCard: FunctionComponent<VisaCardProps> = ({ visa }) => {
   return (
     <div className="flex flex-col justify-center h-full">
-      <div className="relative gap-x-4 flex flex-col lg:flex-row md:space-x-5 space-y-3 md:space-y-0 h-full shadow-custom rounded-medium p-3 max-w-sm md:max-w-3xl mx-auto border border-white bg-white">
+      <div className="relative gap-x-4 flex flex-col lg:flex-row md:space-x-5 space-y-3
+       md:space-y-0 h-full shadow-custom rounded-medium p-3 max-w-sm md:max-w-full 
+      mx-auto border border-white bg-white">
         <div className="w-full lg:w-1/3 bg-white grid place-items-center content-between">
           <BlurImage
             src={`${visa.image}`}

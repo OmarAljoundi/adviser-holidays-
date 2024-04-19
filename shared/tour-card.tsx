@@ -57,7 +57,7 @@ const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
       <div className="px-2 sm:px-5 pb-5 pt-3">
         <div className="flex flex-wrap justify-between items-center gap-5">
           <span className="text-primary text-xl font-medium">
-            {tour?.price_double} ر.ع
+            {tour?.price_double} USD
             <span className="text-base text-neutral-700">
               {" "}
               / للشخص في الغرفة المزدوجة{" "}
