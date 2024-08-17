@@ -10,6 +10,7 @@ import TourBenfits from "./tour-benfits";
 import TourHotels from "./tour-hotels";
 import TourRelated from "./tour-related";
 import { Metadata } from "next";
+import TourAdditionalInfo from "./tour-additional-info";
 
 export async function generateMetadata({
   params,
@@ -73,6 +74,7 @@ const TourPage: FunctionComponent<{ params: { slug: string } }> = async ({
           <TourInitailInfo tour={tour} />
           <TourImages tour={tour} />
         </div>
+        {tour.additional_Info && <TourAdditionalInfo additionalInfo={tour.additional_Info} />}
         <TourPlan tour={tour} />
         <TourBenfits tour={tour} />
         {tour?.tour_hotels && tour?.tour_hotels.length > 0 && (

@@ -19,7 +19,6 @@ export default async function middleware(req: NextRequest) {
   if (isDashboard) {
     const supabase = createMiddlewareClient<Database>({ req, res })
     const response = await supabase.auth.getSession()
-    console.log('isAuthed? ', response?.data?.session ? 'TRUE' : 'FALSE')
     if (response.data.session == null) {
       return NextResponse.redirect(`${process.env.NEXT_PUBLIC_URL!}/admin/login`, { headers: requestHeaders })
     }

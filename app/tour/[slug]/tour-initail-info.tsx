@@ -27,8 +27,7 @@ const TourInitailInfo: FunctionComponent<TourInitailInfoProps> = ({ tour }) => {
             <IoPricetags />
           </IconTourProvider>
           <h1 className="text-sm sm:text-base flex flex-col md:flex-row text-center">
-            <span>طفل مع سرير</span>
-            <span className="font-bold pr-1">(2 - 12 سنة)</span>
+            <span>غرفة مفردة</span>
           </h1>
           <h4 className="font-bold text-lg md:text-xl">
             {tour.price_single} USD
