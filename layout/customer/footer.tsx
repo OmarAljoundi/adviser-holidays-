@@ -1,6 +1,5 @@
 "use client";
 import BlurImage from "@/shared/blur-image";
-import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -25,7 +24,7 @@ const Footer = () => {
                 </a>
                 <p dir="auto" className="text-xl">
                   تعتبر شركة أدفايزر للسياحة و السفر, مركزا متكاملا للخدمات
-                  السياحية بنوعيها الداخلي والخارجي بخبرة تزيد على 12 أعوام.
+                  السياحية بنوعيها الداخلي والخارجي بخبرة تزيد على 15 أعوام.
                 </p>
               </div>
             </div>

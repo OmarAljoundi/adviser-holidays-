@@ -29,12 +29,12 @@ const BestTours = ImportDynamic(
     loading: () => <BestToursLoading />,
   }
 );
-const TourTypes = ImportDynamic(
-  () => import("./(components)/(third)/tour-type"),
-  {
-    ssr: false,
-  }
-);
+// const TourTypes = ImportDynamic(
+//   () => import("./(components)/(third)/tour-type"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 const Faq = ImportDynamic(() => import("./(components)/(fourth)/faq-list"), {
   ssr: false,
@@ -81,10 +81,10 @@ export default async function Home() {
       <Suspense fallback={<BestToursLoading />}>
         <BestTours />
       </Suspense>
-
+{/* 
       <Suspense fallback={<TourTypeLoading />}>
         <TourTypes />
-      </Suspense>
+      </Suspense> */}
 
       <Suspense>
         <Faq />

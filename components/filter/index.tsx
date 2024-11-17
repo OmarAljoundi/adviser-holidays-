@@ -126,9 +126,9 @@ const Filter: FunctionComponent<FilterProps> = () => {
       <div className="lg:shadow-card p-3">
         <FilterLocation />
       </div>
-      <div className="lg:shadow-card p-3">
+      {/* <div className="lg:shadow-card p-3">
         <FilterTypes />
-      </div>
+      </div> */}
       <div className="lg:shadow-card p-3">
         <FilterPrice />
       </div>

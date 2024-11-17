@@ -51,7 +51,7 @@ const HeroFilter: FunctionComponent<HeroFilterProps> = () => {
     <>
       <motion.div
         className={cn(
-          "p-3 sm:p-4 relative lg:py-6 lg:px-8 bg-white  border  grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-x-6 sm:gap-y-2 h-full rounded-none xl:rounded-medium"
+          "p-3 sm:p-4 relative lg:py-6 lg:px-8 bg-white  border  grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-2 sm:gap-x-2 sm:gap-y-2 h-full rounded-none xl:rounded-medium"
         )}
         variants={CONTAINER_VAR}
         initial="hidden"
@@ -59,7 +59,7 @@ const HeroFilter: FunctionComponent<HeroFilterProps> = () => {
         viewport={{ once: true }}
       >
         <motion.div
-          className="flex flex-wrap gap-y-2 justify-between items-center col-span-2 mb-1 lg:col-span-4 xl:col-span-5"
+          className="flex flex-wrap gap-y-2 justify-between items-center col-span-2 mb-1 lg:col-span-3 xl:col-span-4"
           variants={{ ...ITEMS_VAR }}
         >
           <h1 className="text-xl text-center  ">ابحث عن الرحلة التي تناسبك</h1>
@@ -80,17 +80,17 @@ const HeroFilter: FunctionComponent<HeroFilterProps> = () => {
         <motion.div variants={{ ...ITEMS_VAR }}>
           <CountryDropdown />
         </motion.div>
-        <motion.div variants={{ ...ITEMS_VAR }}>
+        {/* <motion.div variants={{ ...ITEMS_VAR }}>
           <TypeDropdown types={types?.results ?? []} />
-        </motion.div>
+        </motion.div> */}
 
-        <motion.div variants={{ ...ITEMS_VAR }}>
+        <motion.div variants={{ ...ITEMS_VAR }} className="col-span-2 lg:col-span-1">
           <DurationDropdown />
         </motion.div>
 
         <motion.div
           variants={{ ...ITEMS_VAR }}
-          className="col-span-2 lg:col-span-4 xl:col-span-1"
+          className="col-span-2 lg:col-span-3 xl:col-span-1"
         >
           <Button
             className="w-full "

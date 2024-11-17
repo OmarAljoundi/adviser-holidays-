@@ -45,12 +45,12 @@ const TourSectionInfo: FunctionComponent<TourSectionInfoProps> = ({ tour }) => {
             {tour.is_ticket_included ? "التذاكر مشمولة" : "التذاكر غير مشمولة"}
           </h4>
         </div>
-        <div className="flex gap-x-2 items-center">
+        {/* <div className="flex gap-x-2 items-center">
           <IconTourProvider>
             <MdOutlineTravelExplore />
           </IconTourProvider>
           <h4>{tour.tour_type?.name}</h4>
-        </div>
+        </div> */}
       </div>
     </div>
   );
