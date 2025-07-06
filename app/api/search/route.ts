@@ -17,6 +17,9 @@ const supabase = createClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, p
     persistSession: false,
     detectSessionInUrl: false,
   },
+  db:{
+    schema:"adviser" as any
+  }
 })
 
 type OrQuriesProp = {

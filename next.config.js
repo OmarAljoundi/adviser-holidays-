@@ -18,6 +18,9 @@ const nextConfig = {
         hostname: "cdlxkuzvjlyvwgzgcdro.supabase.co",
       },
       {
+        hostname:"skkyjvdnikftxykbddoi.supabase.co"
+      },
+      {
         hostname: "flagcdn.com",
       },
       {
