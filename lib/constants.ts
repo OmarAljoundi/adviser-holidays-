@@ -1,61 +1,3 @@
-import {
-  Brush,
-  BusFront,
-  Contact2,
-  Hotel,
-  MapPin,
-  Plane,
-  Settings,
-} from "lucide-react";
-import { FunctionKeys } from "./utils";
-import { ModalProps } from "@/hooks/use-modal";
-
-type MenuItemsProps = {
-  label: string;
-  icon: React.ComponentType<any>;
-  href: string;
-  subMenu?: MenuButtonProps[];
-};
-
-export type MenuButtonProps = {
-  label: string;
-  href: string;
-  button?: {
-    label: string;
-    type: "link" | "trigger";
-    action?: FunctionKeys<ModalProps>;
-    href?: string;
-  };
-};
-
-export const MenuItems: MenuItemsProps[] = [
-  {
-    label: "Tours",
-    icon: Plane,
-    href: "/admin/dashboard/tour",
-  },
-  {
-    label: "Tour Types",
-    icon: BusFront,
-    href: "/admin/dashboard/tour/types",
-  },
-  {
-    label: "Destination",
-    icon: MapPin,
-    href: "/admin/dashboard/destination",
-  },
-  {
-    label: "Customers",
-    icon: Contact2,
-    href: "/admin/dashboard/customer",
-  },
-  {
-    label: "Settings",
-    icon: Settings,
-    href: "/admin/dashboard/setting",
-  },
-];
-
 export const COUNTRIES = [
   { label: "سلوفاكيا", countryCode: "SK" },
   { label: "المانيا", countryCode: "DE" },
@@ -203,4 +145,57 @@ export const CUSTOMER_STATUS: {
     condition: "No response",
     color: "danger",
   },
+];
+
+export const europeanCountries = [
+  { label: "النمسا", countryCode: "AT" },
+  { label: "ايطاليا", countryCode: "IT" },
+  { label: "سويسرا", countryCode: "CH" },
+  { label: "المانيا", countryCode: "DE" },
+  { label: "فرنسا", countryCode: "FR" },
+  { label: "اسبانيا", countryCode: "ES" },
+  { label: "التشيك", countryCode: "CZ" },
+  { label: "النرويج", countryCode: "NO" },
+  { label: "تركيا", countryCode: "TR" },
+  { label: "هولندا", countryCode: "NL" },
+  { label: "المجر", countryCode: "HU" },
+  { label: "ماليزيا", countryCode: "MY" },
+  { label: "اندونيسيا", countryCode: "ID" },
+  { label: "تايلند", countryCode: "TH" },
+  { label: "السويد", countryCode: "SE" },
+  { label: "فنلندا", countryCode: "FI" },
+  { label: "الدنمارك", countryCode: "DK" },
+  { label: "امريكا", countryCode: "US" },
+  { label: "المكسيك", countryCode: "MX" },
+  { label: "البرتغال", countryCode: "PT" },
+  { label: "اليونان", countryCode: "GR" },
+  { label: "المغرب", countryCode: "MA" },
+  { label: "سيرلنكا", countryCode: "LK" },
+  { label: "المالديف", countryCode: "MV" },
+  { label: "روسيا", countryCode: "RU" },
+  { label: "بولندا", countryCode: "PL" },
+  { label: "استونيا", countryCode: "EE" },
+  { label: "لاتفيا", countryCode: "LV" },
+  { label: "البوسنة", countryCode: "BA" },
+  { label: "اذربيجان", countryCode: "AZ" },
+  { label: "جورجيا", countryCode: "GE" },
+  { label: "سلوفينيا", countryCode: "SI" },
+  { label: "كرواتيا", countryCode: "HR" },
+  { label: "بلغاريا", countryCode: "BG" },
+  { label: "رومانيا", countryCode: "RO" },
+  { label: "صربيا", countryCode: "RS" },
+  { label: "الجبل الاسود", countryCode: "ME" },
+  { label: "بلجيكا", countryCode: "BE" },
+  { label: "البانيا", countryCode: "AL" },
+  { label: "مولدافا", countryCode: "MD" },
+  { label: "اليابان", countryCode: "JP" },
+  { label: "كوريا الجنوبية", countryCode: "KR" },
+  { label: "الصين", countryCode: "CN" },
+  { label: "تونس", countryCode: "TN" },
+  { label: "مصر", countryCode: "EG" },
+  { label: "الاردن", countryCode: "JO" },
+  { label: "الامارات", countryCode: "AE" },
+  { label: "السعودية", countryCode: "SA" },
+  { label: "كازخستان ", countryCode: "KZ" },
+  { label: "كوسوفو", countryCode: "XK" },
 ];

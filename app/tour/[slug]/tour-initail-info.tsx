@@ -1,10 +1,10 @@
 import { Separator } from "@/components/ui/separator";
 import IconTourProvider from "@/provider/icon-tour-provider";
-import { Tour } from "@/types/custom";
+import { QueryTourSchema } from "@/schema";
 import { FunctionComponent } from "react";
 import { IoPricetags } from "react-icons/io5";
 interface TourInitailInfoProps {
-  tour: Tour;
+  tour: QueryTourSchema;
 }
 
 const TourInitailInfo: FunctionComponent<TourInitailInfoProps> = ({ tour }) => {
@@ -18,9 +18,13 @@ const TourInitailInfo: FunctionComponent<TourInitailInfoProps> = ({ tour }) => {
             <IoPricetags />
           </IconTourProvider>
           <h1 className="text-sm sm:text-base"> بالغ في غرفة مزدوجة</h1>
-          <h4 className="font-bold text-lg md:text-xl">
-            {tour.price_double} USD
-          </h4>
+          <div className=" text-black">
+            <span className="font-bold font-english text-lg md:text-xl">
+              {" "}
+              {tour?.priceDoubleSa}
+            </span>{" "}
+            <span className="font-primary text-black text-sm">د.أ</span>
+          </div>
         </div>
         <div className="grid space-y-2 justify-items-center border  bg-gray-200 rounded-medium p-2 md:p-4 gap-x-2 h-full items-start">
           <IconTourProvider>
@@ -29,9 +33,13 @@ const TourInitailInfo: FunctionComponent<TourInitailInfoProps> = ({ tour }) => {
           <h1 className="text-sm sm:text-base flex flex-col md:flex-row text-center">
             <span>غرفة مفردة</span>
           </h1>
-          <h4 className="font-bold text-lg md:text-xl">
-            {tour.price_single} USD
-          </h4>
+          <div className=" text-black">
+            <span className="font-bold font-english text-lg md:text-xl">
+              {" "}
+              {tour?.priceSingleSa}
+            </span>{" "}
+            <span className="font-primary text-black text-sm">د.أ</span>
+          </div>
         </div>
       </div>
     </div>

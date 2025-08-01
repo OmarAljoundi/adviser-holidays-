@@ -273,6 +273,7 @@ export const generate = async (tour: Tour) => {
               width: 200,
               height: 200,
             },
+            type: "png",
           }),
         ],
       });

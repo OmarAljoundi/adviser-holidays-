@@ -1,15 +1,10 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
-import { Setting } from "@/types/custom";
 import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
-import { FunctionComponent } from "react";
 import VisaCard from "./visa-card";
+import { visaInfo } from "./lib";
 
-interface VisaCardListingProps {
-  data?: Setting;
-}
-
-const VisaCardListing: FunctionComponent<VisaCardListingProps> = ({ data }) => {
+const VisaCardListing = () => {
   return (
     <>
       <Breadcrumbs variant="bordered">
@@ -19,7 +14,7 @@ const VisaCardListing: FunctionComponent<VisaCardListingProps> = ({ data }) => {
       <Separator className="my-4" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {data?.visa?.visa_types?.map((visa) => (
+        {visaInfo?.visa?.visa_types?.map((visa) => (
           <VisaCard visa={visa} key={visa.uuid} />
         ))}
       </div>

@@ -3,16 +3,15 @@ import { useState, useEffect, FC, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { useInView } from "react-intersection-observer";
 import React from "react";
-import { Tour } from "@/types/custom";
 import { filterTours } from "@/lib/utils";
 import TourCard from "./tour-card";
 import { MdSearchOff } from "react-icons/md";
 import { IconContext } from "react-icons";
-import { Button, Link } from "@nextui-org/react";
-import { ArrowLeft } from "lucide-react";
+import { Link } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { REVALIDATE_TOUR_LIST } from "@/lib/keys";
-import { getTours } from "@/lib/operations";
+import { getTours } from "@/server/public-query.server";
+import { QueryTourSchema } from "@/schema";
 const TourRendering: FC<{ tourIds?: number[] }> = ({ tourIds }) => {
   const searchParams = useSearchParams();
   const { ref, inView } = useInView();
@@ -20,16 +19,15 @@ const TourRendering: FC<{ tourIds?: number[] }> = ({ tourIds }) => {
 
   const { data: tours } = useQuery({
     queryKey: [REVALIDATE_TOUR_LIST],
-    queryFn: async () => await getTours(),
+    queryFn: async () => await getTours("SAR"),
     select: (response) => {
       return tourIds
-        ? response?.filter((m) => tourIds.includes(m.id!) && m.is_active)
-        : response?.filter((x) => x.is_active);
+        ? response?.result?.filter((m) => tourIds.includes(m.id!) && m.isActive)
+        : response?.result?.filter((x) => x.isActive);
     },
   });
 
   useEffect(() => {
-    console.log(inView);
     if (inView) {
       setCurrentSize(currentSize + 10);
     }
@@ -43,7 +41,6 @@ const TourRendering: FC<{ tourIds?: number[] }> = ({ tourIds }) => {
         type: searchParams?.get("type") as string,
         sortMemebr: searchParams?.get("sortMemebr"),
         maxprice: searchParams?.get("maxprice") as any,
-        minprice: searchParams?.get("minprice") as any,
         sortOrder: searchParams?.get("sortOrder") as any,
       },
       tours || []
@@ -55,7 +52,6 @@ const TourRendering: FC<{ tourIds?: number[] }> = ({ tourIds }) => {
     searchParams?.get("type"),
     searchParams?.get("page"),
     searchParams?.get("maxprice"),
-    searchParams?.get("minprice"),
     searchParams?.get("sortMemebr"),
     searchParams?.get("sortOrder"),
   ]);
@@ -95,7 +91,7 @@ const TourRendering: FC<{ tourIds?: number[] }> = ({ tourIds }) => {
 export default TourRendering;
 
 // eslint-disable-next-line react/display-name
-const TourContent = React.forwardRef((tour: Tour, ref) => {
+const TourContent = React.forwardRef((tour: QueryTourSchema, ref) => {
   const content = ref ? (
     <article
       className="rounded-lg tour-card listing-card group/item relative inline-flex w-full flex-col"

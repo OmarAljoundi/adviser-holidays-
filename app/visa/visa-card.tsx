@@ -1,4 +1,5 @@
 import BlurImage from "@/components/common/blur-image";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { VisaType } from "@/types/custom";
 import { Chip } from "@nextui-org/react";
@@ -11,9 +12,11 @@ interface VisaCardProps {
 const VisaCard: FunctionComponent<VisaCardProps> = ({ visa }) => {
   return (
     <div className="flex flex-col justify-center h-full">
-      <div className="relative gap-x-4 flex flex-col lg:flex-row md:space-x-5 space-y-3
+      <div
+        className="relative gap-x-4 flex flex-col lg:flex-row md:space-x-5 space-y-3
        md:space-y-0 h-full shadow-custom rounded-medium p-3 max-w-sm md:max-w-full 
-      mx-auto border border-white bg-white">
+      mx-auto border border-white bg-white"
+      >
         <div className="w-full lg:w-1/3 bg-white grid place-items-center content-between">
           <BlurImage
             src={`${visa.image}`}
@@ -37,10 +40,13 @@ const VisaCard: FunctionComponent<VisaCardProps> = ({ visa }) => {
             ))}
           </ul>
           <Separator className="my-2" />
-          <div className="rounded-medium shadow-custom text-primary bg-secondary p-2">
-            <p>{visa.note}</p>
-          </div>
-          <Chip color="primary">سعر التأشيرة: {visa.price} </Chip>
+          {visa.note && (
+            <div className="rounded-medium shadow-custom text-primary bg-secondary p-2">
+              <p>{visa.note}</p>
+            </div>
+          )}
+
+          <Badge variant={"default"}>سعر التأشيرة: {visa.price} </Badge>
         </div>
       </div>
     </div>

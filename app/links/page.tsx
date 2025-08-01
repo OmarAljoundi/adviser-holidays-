@@ -1,14 +1,10 @@
-import { getContentData } from "@/lib/operations";
-import { FunctionComponent } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next";
 import LinksBreadCrumb from "./links-bread-crumb";
 import LinkItems from "./link-items";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const response = await getContentData();
-
-  const { description, tags, title } = response?.usefulLinks?.seo || {
+  const { description, tags, title } = {
     title: "",
     description: "",
     tags: "",
@@ -28,8 +24,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const UsefulLinksPage = async () => {
-  const data = await getContentData();
-
   return (
     <>
       <div className="container mb-10">
@@ -40,7 +34,7 @@ const UsefulLinksPage = async () => {
           الروابط المهمة
         </h1>
 
-        <LinkItems data={data} />
+        <LinkItems />
       </div>
     </>
   );

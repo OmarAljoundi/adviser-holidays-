@@ -1,21 +1,20 @@
-'use client'
-import BlurImage from '@/components/common/blur-image'
-import IconTourProvider from '@/provider/icon-tour-provider'
-import { Tour } from '@/types/custom'
-import { Accordion, AccordionItem, Avatar, Chip } from '@nextui-org/react'
-import { FunctionComponent, ReactNode } from 'react'
-import { RxPlus } from 'react-icons/rx'
+"use client";
+import IconTourProvider from "@/provider/icon-tour-provider";
+import { QueryTourSchema } from "@/schema";
+import { Accordion, AccordionItem, Chip } from "@nextui-org/react";
+import { FunctionComponent } from "react";
+import { RxPlus } from "react-icons/rx";
 interface TourPlanProps {
-  tour: Tour
+  tour: QueryTourSchema;
 }
 
 const TourPlan: FunctionComponent<TourPlanProps> = ({ tour }) => {
   const AccordianItems = () => {
-    return tour.tour_sections?.map((section, index) => (
+    return tour.tourSections?.map((section, index) => (
       <AccordionItem
-        className="px-0"
+        className="px-2"
         classNames={{
-          titleWrapper: 'text-right',
+          titleWrapper: "text-right",
         }}
         indicator={
           <IconTourProvider>
@@ -35,13 +34,10 @@ const TourPlan: FunctionComponent<TourPlanProps> = ({ tour }) => {
           <div className="col-span-9">
             <p>{section.description}</p>
           </div>
-          <div className="col-span-3">
-            {section.image && <BlurImage src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${section.image}`} alt={section.title} width={300} height={150} />}
-          </div>
         </div>
       </AccordionItem>
-    ))
-  }
+    ));
+  };
 
   return (
     <Accordion
@@ -53,16 +49,16 @@ const TourPlan: FunctionComponent<TourPlanProps> = ({ tour }) => {
           enter: {
             y: 0,
             opacity: 1,
-            height: 'auto',
+            height: "auto",
             transition: {
               height: {
-                type: 'spring',
+                type: "spring",
                 stiffness: 500,
                 damping: 30,
                 duration: 1,
               },
               opacity: {
-                easings: 'ease',
+                //easings: "ease",
                 duration: 1,
               },
             },
@@ -73,11 +69,11 @@ const TourPlan: FunctionComponent<TourPlanProps> = ({ tour }) => {
             height: 0,
             transition: {
               height: {
-                easings: 'ease',
+                // easings: "ease",
                 duration: 0.25,
               },
               opacity: {
-                easings: 'ease',
+                //   easings: "ease",
                 duration: 0.3,
               },
             },
@@ -87,7 +83,7 @@ const TourPlan: FunctionComponent<TourPlanProps> = ({ tour }) => {
     >
       {AccordianItems() as any}
     </Accordion>
-  )
-}
+  );
+};
 
-export default TourPlan
+export default TourPlan;

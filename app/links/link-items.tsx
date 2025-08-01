@@ -1,18 +1,13 @@
 "use client";
 import BlurImageV2 from "@/components/common/BlurImageV2";
-import { Setting } from "@/types/custom";
 import { Button } from "@nextui-org/react";
 import { Link } from "lucide-react";
-import { FunctionComponent } from "react";
+import { usefulLinksSetting } from "./lib";
 
-interface LinkItemsProps {
-  data: Setting | undefined;
-}
-
-const LinkItems: FunctionComponent<LinkItemsProps> = ({ data }) => {
+const LinkItems = () => {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-start">
-      {data?.usefulLinks?.links?.map((item) => (
+      {usefulLinksSetting?.usefulLinks?.links?.map((item) => (
         <div
           className="flex flex-col p-3 shadow-medium rounded-medium h-full justify-between" // Flex container
           key={item.uuid}

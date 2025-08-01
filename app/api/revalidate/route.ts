@@ -1,30 +1,26 @@
-import { revalidatePath, revalidateTag } from 'next/cache'
-import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from "next/cache";
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const tag = req.nextUrl.searchParams.get('tag') ?? ('' as string)
-    if (!tag) {
-      throw new Error('Tags is missing!')
-    }
-    revalidateTag(tag)
-    console.log('Done revalidating -- ', tag)
+    revalidatePath("/", "layout");
     return NextResponse.json(
       {
         success: true,
       },
       {
         status: 200,
-      },
-    )
+      }
+    );
   } catch (ex) {
+    console.error("Couldn't be revalidated", ex);
     return NextResponse.json(
       {
         success: false,
       },
       {
         status: 400,
-      },
-    )
+      }
+    );
   }
 }

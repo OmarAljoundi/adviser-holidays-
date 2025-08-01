@@ -1,3 +1,4 @@
+// oxlint-disable no-new-array
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 

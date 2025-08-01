@@ -1,14 +1,14 @@
 "use client";
 import BlurImage from "@/components/common/blur-image";
-import { Tour } from "@/types/custom";
 import { FunctionComponent } from "react";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import IconTourProvider from "@/provider/icon-tour-provider";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
+import { QueryTourSchema } from "@/schema";
 interface TourImagesProps {
-  tour: Tour;
+  tour: QueryTourSchema;
 }
 
 const TourImages: FunctionComponent<TourImagesProps> = ({ tour }) => {

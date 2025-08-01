@@ -1,11 +1,11 @@
 import { Separator } from "@/components/ui/separator";
 import IconTourProvider from "@/provider/icon-tour-provider";
-import { Tour } from "@/types/custom";
-import { Check, Dot, X } from "lucide-react";
+import { QueryTourSchema } from "@/schema";
+import { Dot } from "lucide-react";
 import { FC } from "react";
 import { BsCheckLg } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
-const TourBenfits: FC<{ tour: Tour }> = ({ tour }) => {
+const TourBenfits: FC<{ tour: QueryTourSchema }> = ({ tour }) => {
   return (
     <div className="shadow-custom rounded-medium p-4">
       <h4 className="mb-0 text-2xl font-semibold font-primary">
@@ -19,7 +19,7 @@ const TourBenfits: FC<{ tour: Tour }> = ({ tour }) => {
         <h6 className="font-semibold font-primary"> البرنامج يشمل </h6>
       </div>
       <ul className="flex flex-col gap-4 mb-10 mt-5">
-        {tour?.tour_includes?.map((i) => (
+        {tour?.tourIncludes?.map((i) => (
           <li key={i.uuid}>
             <div className="flex items-start gap-4">
               <div className="grid items-start">
@@ -50,7 +50,7 @@ const TourBenfits: FC<{ tour: Tour }> = ({ tour }) => {
         <h6 className="font-semibold font-primary"> البرنامج لايشمل</h6>
       </div>
       <ul className="flex flex-col gap-4 mb-10  mt-5">
-        {tour?.tour_excludes?.map(({ uuid, description, title }) => (
+        {tour?.tourExcludes?.map(({ uuid, description }) => (
           <li key={uuid}>
             <div className="grid items-center flex-wrap">
               {description.split(",").map((i) => (

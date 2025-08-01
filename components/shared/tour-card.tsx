@@ -5,12 +5,13 @@ import BlurImage from "./blur-image";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { QueryTourSchema } from "@/schema";
+import TourPrice from "./tour-price";
 
 const TourCard: React.FC<{
   tour: QueryTourSchema;
 }> = ({ tour }) => {
   return (
-    <div className="bg-white shadow-xl rounded-2xl p-2 ">
+    <div className="bg-white shadow-xl rounded-2xl p-2 col-span-12 md:col-span-6 xl:col-span-4  ">
       <div className="rounded-2xl relative group">
         <div className="relative">
           <Link href={`/tour/${tour.slug}`}>
@@ -40,7 +41,7 @@ const TourCard: React.FC<{
           <div className="flex gap-1">
             {tour?.tourCountries?.slice(0, 4).map((i) => (
               <span
-                className="inline-block bg-secondary text-white px-2 py-1 text-[14px] rounded-md font-primary"
+                className="inline-block bg-secondary text-black/70 px-2 py-1 text-[14px] rounded-md font-primary"
                 key={i}
               >
                 {i}
@@ -60,15 +61,8 @@ const TourCard: React.FC<{
       </div>
       <div className="px-2 sm:px-5 pb-5 pt-3">
         <div className="flex flex-wrap justify-between items-center gap-5">
-          <div className=" text-primary">
-            <span className="font-bold font-english text-3xl">
-              {" "}
-              {tour?.priceDouble}
-            </span>{" "}
-            <span className="font-primary text-black text-[10px]">
-              ريال عماني
-            </span>
-          </div>
+          <TourPrice tour={tour} />
+
           <Link href={`/tour/${tour.slug}`}>
             <Button variant={"default"} size={"sm"} className="font-primary">
               عرض التفاصيل

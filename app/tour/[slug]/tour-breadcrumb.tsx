@@ -1,14 +1,12 @@
 "use client";
-import { useModal } from "@/hooks/use-modal";
-import { ATTACHMENT_PATH } from "@/lib/keys";
 import { generate } from "@/lib/word-helper";
-import { ExternalFile, Tour } from "@/types/custom";
+import { QueryTourSchema } from "@/schema";
 import { BreadcrumbItem, Breadcrumbs, Button } from "@nextui-org/react";
-import { File, Send } from "lucide-react";
+import { File } from "lucide-react";
 import { FunctionComponent } from "react";
 
 interface TourBreadcrumbProps {
-  tour: Tour;
+  tour: QueryTourSchema;
 }
 
 const TourBreadcrumb: FunctionComponent<TourBreadcrumbProps> = ({ tour }) => {

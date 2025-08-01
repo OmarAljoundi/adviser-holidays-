@@ -1,44 +1,17 @@
 export const revalidate = 0;
-import ImportDynamic from "next/dynamic";
 import { Suspense } from "react";
-import DestinationLoading from "./(components)/(first)/destination-loading";
-import BestToursLoading from "./(components)/(second)/best-tours-loading";
+import DestinationLoading from "./components/destination-loading";
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
 import { REVALIDATE_CONTENT_LIST } from "@/lib/keys";
-import { getContentData } from "@/lib/operations";
-import TourTypeLoading from "./(components)/(third)/tour-type-loading";
 import { Metadata } from "next";
-import HeroSlides from "./(components)/(hero)/hero-slides";
-
-const Destination = ImportDynamic(
-  () => import("./(components)/(first)/destination"),
-  {
-    ssr: false,
-    loading: () => <DestinationLoading />,
-  }
-);
-
-const BestTours = ImportDynamic(
-  () => import("./(components)/(second)/best-tours"),
-  {
-    ssr: false,
-    loading: () => <BestToursLoading />,
-  }
-);
-// const TourTypes = ImportDynamic(
-//   () => import("./(components)/(third)/tour-type"),
-//   {
-//     ssr: false,
-//   }
-// );
-
-const Faq = ImportDynamic(() => import("./(components)/(fourth)/faq-list"), {
-  ssr: false,
-});
+import FaqList from "./components/faq-list";
+import Destination from "./components/destination";
+import { getContentData, getDestinations } from "@/server/public-query.server";
+import HeroSlides from "./components/hero-slides";
 
 export async function generateMetadata(): Promise<Metadata> {
   const response = await getContentData();
@@ -71,23 +44,23 @@ export default async function Home() {
   return (
     <div>
       <HydrationBoundary state={dehydrate(query)}>
-        <HeroSlides />
+        <HeroSlides destinationPromise={getDestinations()} />
       </HydrationBoundary>
 
       <Suspense fallback={<DestinationLoading />}>
         <Destination />
       </Suspense>
 
-      <Suspense fallback={<BestToursLoading />}>
+      {/* <Suspense fallback={<BestToursLoading />}>
         <BestTours />
-      </Suspense>
-{/* 
+      </Suspense> */}
+      {/* 
       <Suspense fallback={<TourTypeLoading />}>
         <TourTypes />
       </Suspense> */}
 
       <Suspense>
-        <Faq />
+        <FaqList />
       </Suspense>
     </div>
   );
