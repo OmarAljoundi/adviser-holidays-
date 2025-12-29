@@ -72,7 +72,7 @@ export function getTourColumns(): ColumnDef<QueryTourSchema>[] {
       },
     },
     {
-      accessorKey: "priceDouble",
+      accessorKey: "priceDoubleJo",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Price Double" />
       ),
@@ -80,7 +80,7 @@ export function getTourColumns(): ColumnDef<QueryTourSchema>[] {
         return (
           <div className="w-32 flex items-center justify-between">
             <span className="max-w-[6rem] truncate">
-              {row.getValue("priceDouble")}
+              {row.getValue("priceDoubleJo")}
             </span>
           </div>
         );

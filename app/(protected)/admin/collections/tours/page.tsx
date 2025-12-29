@@ -1,41 +1,10 @@
+"use cache";
 import ContentWrapper from "@/components/admin-panel/contet-wrapper";
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
 import React, { Suspense } from "react";
 import { TourTable } from "./component/table";
 import { tourQuery } from "@/server/tours.server";
 import { unstable_cache } from "next/cache";
-
-const tourQueryCached = unstable_cache(
-  async () =>
-    tourQuery({
-      orderBy: { id: "desc" },
-      select: {
-        name: true,
-        numberOfDays: true,
-        code: true,
-        images: true,
-        id: true,
-        isActive: true,
-        priceDouble: true,
-        priceDoubleSa: true,
-        priceSingle: true,
-        priceSingleSa: true,
-        slug: true,
-        startDay: true,
-        tourCountries: true,
-
-        tourType: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-          },
-        },
-      },
-    }) as any,
-  ["tourQuery"],
-  { revalidate: 86400 }
-);
 
 export default async function Page() {
   return (
@@ -56,7 +25,34 @@ export default async function Page() {
           />
         }
       >
-        <TourTable dataPromise={tourQueryCached()} />
+        <TourTable
+          dataPromise={
+            tourQuery({
+              orderBy: { id: "desc" },
+              select: {
+                name: true,
+                numberOfDays: true,
+                code: true,
+                images: true,
+                id: true,
+                isActive: true,
+                priceDoubleJo:true,
+                priceSingleJo:true,
+                slug: true,
+                startDay: true,
+                tourCountries: true,
+
+                tourType: {
+                  select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                  },
+                },
+              },
+            }) as any
+          }
+        />
       </Suspense>
     </ContentWrapper>
   );
