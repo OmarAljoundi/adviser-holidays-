@@ -4,6 +4,7 @@ import { db } from "@/db.server";
 import { Prisma } from "@/generated/prisma/client";
 import { REVALIDATE_TOUR_TYPE } from "@/lib/keys";
 import { revalidateTag, unstable_noStore } from "next/cache";
+import { revalidateDestination } from "./revalidation.server";
 
 /**
  * Query multiple tour types with strong typing for filter, pagination, and relations
@@ -22,8 +23,7 @@ export async function tourTypeUpdate<T extends Prisma.TourTypeUpdateArgs>(
 ): Promise<Prisma.TourTypeGetPayload<T>> {
   unstable_noStore();
   const result = await db.tourType.update(args);
-  revalidateTag(`${REVALIDATE_TOUR_TYPE}:${args.data.id}`, "max");
-  revalidateTag(`${REVALIDATE_TOUR_TYPE}`, "max");
+  await revalidateDestination();
   return result;
 }
 
@@ -35,9 +35,7 @@ export async function tourTypeDelete<T extends Prisma.TourTypeDeleteArgs>(
 ): Promise<Prisma.TourTypeGetPayload<T>> {
   unstable_noStore();
   const result = await db.tourType.delete(args);
-
-  revalidateTag(`${REVALIDATE_TOUR_TYPE}:${args.where.id}`, "max");
-  revalidateTag(`${REVALIDATE_TOUR_TYPE}`, "max");
+  await revalidateDestination();
   return result;
 }
 
@@ -60,8 +58,7 @@ export async function tourTypeCreate<T extends Prisma.TourTypeCreateArgs>(
 ): Promise<Prisma.TourTypeGetPayload<T>> {
   unstable_noStore();
   const result = await db.tourType.create(args);
-
-  revalidateTag(`${REVALIDATE_TOUR_TYPE}`, "max");
+  await revalidateDestination();
   return result;
 }
 
@@ -96,16 +93,12 @@ export async function tourTypeUpdateOrders(
       }
     });
 
+    await revalidateDestination();
+
     console.log(
       `tourType order updated successfully (${changedtourTypes.length} tourTypes changed)`
     );
-    changedtourTypes.forEach((element) => {
-      revalidateTag(`${REVALIDATE_TOUR_TYPE}:${element.id}`, "max");
-    });
-
-      revalidateTag(`${REVALIDATE_TOUR_TYPE}`, "max");
-
-    
+    await revalidateDestination();
   } catch (error) {
     console.error("Error updating tourType order:", error);
     throw error;

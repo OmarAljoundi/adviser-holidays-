@@ -1,9 +1,9 @@
 "use server";
 
 import { db } from "@/db.server";
-import { revalidateStaticPages } from "./revalidation.server";
 import { unstable_noStore } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
+import { revalidateDestination } from "./revalidation.server";
 
 /**
  * Query multiple locations with strong typing for filter, pagination, and relations
@@ -23,6 +23,7 @@ export async function locationUpdate<T extends Prisma.LocationUpdateArgs>(
   unstable_noStore();
 
   const result = await db.location.update(args);
+  await revalidateDestination()
   return result;
 }
 
@@ -36,6 +37,7 @@ export async function locationUpdateMany<
 ): Promise<Prisma.BatchPayload> {
   unstable_noStore();
   const result = await db.location.updateMany(args);
+  await revalidateDestination()
   return result;
 }
 
@@ -47,6 +49,7 @@ export async function locationDelete<T extends Prisma.LocationDeleteArgs>(
 ): Promise<Prisma.LocationGetPayload<T>> {
   unstable_noStore();
   const result = await db.location.delete(args);
+  await revalidateDestination()
   return result;
 }
 
@@ -69,6 +72,7 @@ export async function locationCreate<T extends Prisma.LocationCreateArgs>(
 ): Promise<Prisma.LocationGetPayload<T>> {
   unstable_noStore();
   const result = await db.location.create(args);
+  await revalidateDestination()
   return result;
 }
 
@@ -103,7 +107,8 @@ export async function locationUpdateOrders(
       }
     });
 
-    await revalidateStaticPages();
+    await revalidateDestination()
+
     console.log(
       `Location order updated successfully (${changedLocations.length} locations changed)`
     );

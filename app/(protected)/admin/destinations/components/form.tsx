@@ -34,7 +34,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
   revalidateDestination,
-  revalidateStaticPages,
 } from "@/server/revalidation.server";
 import { useTransitionStore } from "@/hooks/use-global-transition";
 
@@ -67,21 +66,16 @@ export function LocationForm({
       });
 
       if (body.slug != parsedBody.slug) {
-        await revalidateDestination(parsedBody.slug);
-        await revalidateDestination(body.slug);
+        await revalidateDestination();
       } else {
-        await revalidateDestination(body.slug);
       }
 
-      await revalidateStaticPages();
     } else {
       const parsedBody = updateLocationSchema.parse(body);
       await locationCreate({
         data: { ...parsedBody, order: newOrder, isActive: true,  },
       });
 
-      await revalidateDestination(parsedBody.slug);
-      await revalidateStaticPages();
     }
 
     toast.success("Destination saved successfully");

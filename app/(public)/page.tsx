@@ -1,58 +1,45 @@
-export const revalidate = 0;
+"use cache";
+
 import { Suspense } from "react";
 import DestinationLoading from "./components/destination-loading";
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-} from "@tanstack/react-query";
-import { REVALIDATE_CONTENT_LIST } from "@/lib/keys";
 import { Metadata } from "next";
 import FaqList from "./components/faq-list";
-import Destination from "./components/destination";
-import {  getDestinations } from "@/server/public-query.server";
+import { getDestinations } from "@/server/public-query.server";
 import HeroSlides from "./components/hero-slides";
 import { getSettingBySectionAsync } from "@/server/settings.server";
 import { seoSchema } from "@/schema/seo-schema";
 import { generatePageSeo } from "@/lib/generate-seo";
+import DestinationListing from "./components/destination-listing";
+import { cacheTag } from "next/cache";
+import { HOME_PAGE } from "@/lib/keys";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { seoStaticPagesHome } = (await getSettingBySectionAsync(
-    "CMS"
-  ));
+  cacheTag(HOME_PAGE);
 
+  const { seoStaticPagesHome } = await getSettingBySectionAsync("CMS");
   const parsedSeo = seoSchema.parse(seoStaticPagesHome?.seo ?? {});
-
-  const dictionary = generatePageSeo(parsedSeo, "/");
-  return dictionary;
+  return generatePageSeo(parsedSeo, "/");
 }
 
-
-
 export default async function Home() {
-  const query = new QueryClient();
-  await query.prefetchQuery({
-    queryKey: [REVALIDATE_CONTENT_LIST],
-    queryFn: () => getSettingBySectionAsync("CMS"),
-  });
+  cacheTag(HOME_PAGE);
 
   return (
     <div>
-      <HydrationBoundary state={dehydrate(query)}>
-        <HeroSlides destinationPromise={getDestinations()} />
-      </HydrationBoundary>
-
-      <Suspense fallback={<DestinationLoading />}>
-        <Destination />
+      <Suspense
+        fallback={
+          <div className="h-[600px] w-full bg-gray-100 animate-pulse" />
+        }
+      >
+        <HeroSlides
+          destinationPromise={getDestinations()}
+          dataContentPromise={getSettingBySectionAsync("CMS")}
+        />
       </Suspense>
 
-      {/* <Suspense fallback={<BestToursLoading />}>
-        <BestTours />
-      </Suspense> */}
-      {/* 
-      <Suspense fallback={<TourTypeLoading />}>
-        <TourTypes />
-      </Suspense> */}
+      <Suspense fallback={<DestinationLoading />}>
+        <DestinationListing dataDestination={getDestinations()} />
+      </Suspense>
 
       <Suspense>
         <FaqList />

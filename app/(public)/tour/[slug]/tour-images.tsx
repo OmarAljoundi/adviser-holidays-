@@ -1,6 +1,6 @@
 "use client";
 import BlurImage from "@/components/common/blur-image";
-import { FunctionComponent } from "react";
+import { Activity, FunctionComponent } from "react";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -82,24 +82,28 @@ const TourImages: FunctionComponent<TourImagesProps> = ({ tour }) => {
         ))}
       </Swiper>
 
-      <div>
-        <button
-          className="disabled:opacity-50 left-10 absolute top-1/2 translate-y-1/2 z-10  -prev flex justify-center items-center button -blue-1  
+      <Activity
+        mode={tour.images && tour.images.length > 1 ? "visible" : "hidden"}
+      >
+        <div>
+          <button
+            className="disabled:opacity-50 left-10 absolute top-1/2 translate-y-1/2 z-10  -prev flex justify-center items-center button -blue-1  
              shadow-1 w-10 h-10 rounded-medium sm:d-none js-destination-prev bg-white "
-        >
-          <IconTourProvider>
-            <BsArrowLeftShort />
-          </IconTourProvider>
-        </button>
-        <button
-          className="disabled:opacity-50 right-10 absolute top-1/2 translate-y-1/2 z-10 -next flex justify-center items-center button -blue-1
+          >
+            <IconTourProvider>
+              <BsArrowLeftShort />
+            </IconTourProvider>
+          </button>
+          <button
+            className="disabled:opacity-50 right-10 absolute top-1/2 translate-y-1/2 z-10 -next flex justify-center items-center button -blue-1
             shadow-1 w-10 h-10 rounded-medium sm:d-none js-destination-next bg-white "
-        >
-          <IconTourProvider>
-            <BsArrowRightShort />
-          </IconTourProvider>
-        </button>
-      </div>
+          >
+            <IconTourProvider>
+              <BsArrowRightShort />
+            </IconTourProvider>
+          </button>
+        </div>
+      </Activity>
     </div>
   );
 };

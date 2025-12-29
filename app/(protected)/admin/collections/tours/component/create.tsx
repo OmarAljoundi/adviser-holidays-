@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { createTourSchema, CreateTourSchema } from "@/schema";
 import { tourCreate } from "@/server/tours.server";
 import { TourForm } from "./form";
-import { revalidateTour } from "@/server/revalidation.server";
+import { revalidateDestination,  } from "@/server/revalidation.server";
 
 export function CreateTour({ tour }: { tour?: CreateTourSchema }) {
   const form = useForm({
@@ -30,7 +30,7 @@ export function CreateTour({ tour }: { tour?: CreateTourSchema }) {
   async function onSubmit(body: CreateTourSchema) {
     const result = await tourCreate({ data: { ...body } });
     if (result.id) {
-      await revalidateTour(body.slug!);
+      await revalidateDestination()
       toast.success("Tour created successfully");
       route.replace(`/admin/collections/tours/${result.id}`);
       route.refresh();

@@ -13,7 +13,6 @@ import {
 } from "@/server/settings.server";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
-import { revalidateStaticPages } from "@/server/revalidation.server";
 
 interface BaseSettingFormProps {
   children: ReactNode;
@@ -61,7 +60,6 @@ export function BaseSettingForm({
     );
 
     if (response.success) {
-      await revalidateStaticPages();
       toast.success("Data saved successfully!");
       route.refresh();
       return;

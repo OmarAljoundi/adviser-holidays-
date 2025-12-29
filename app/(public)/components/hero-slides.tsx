@@ -1,5 +1,5 @@
 "use client";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, use, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import IconTourProvider from "@/provider/icon-tour-provider";
@@ -15,15 +15,15 @@ import Filter from "@/components/filter/filter";
 import { getSettingBySectionAsync } from "@/server/settings.server";
 interface HeroSlidesProps {
   destinationPromise: ReturnType<typeof getDestinations>;
+  dataContentPromise:ReturnType<typeof getSettingBySectionAsync>
 }
 
 const HeroSlides: FunctionComponent<HeroSlidesProps> = ({
   destinationPromise,
+  dataContentPromise
 }) => {
-  const { data } = useQuery({
-    queryKey: [REVALIDATE_CONTENT_LIST],
-    queryFn: async () => await getSettingBySectionAsync("CMS"),
-  });
+
+  const {home} = use(dataContentPromise)
 
   const { onClear } = useCustomerFilter();
 
@@ -64,7 +64,7 @@ const HeroSlides: FunctionComponent<HeroSlidesProps> = ({
         modules={[Navigation, Pagination]}
         className="swiper !p-0"
       >
-        {data?.home?.homehero?.map((item, index) => (
+        {home?.homehero?.map((item, index) => (
           <SwiperSlide key={item.id}>
             <motion.div
               initial="hidden"

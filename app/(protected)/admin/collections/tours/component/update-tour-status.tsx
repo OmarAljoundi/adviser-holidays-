@@ -4,7 +4,7 @@ import { QueryTourSchema } from "@/schema";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import { revalidateTour } from "@/server/revalidation.server";
+import { revalidateDestination } from "@/server/revalidation.server";
 
 export function UpdateTourStatus({ row }: { row: QueryTourSchema }) {
   const route = useRouter();
@@ -23,7 +23,7 @@ export function UpdateTourStatus({ row }: { row: QueryTourSchema }) {
         },
         loading: "Updating tour status in progress ..",
         async success(data) {
-          await revalidateTour(data.slug!);
+          await revalidateDestination();
           route.refresh();
           return `Tour ${data.name} status has been updated successfully`;
         },

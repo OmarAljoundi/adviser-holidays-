@@ -1,5 +1,4 @@
-export const revalidate = 0;
-import React, { Suspense } from "react";
+import  { Suspense } from "react";
 import { BaseSettingForm } from "./components/base-setting-form";
 import { getSettingBySectionAsync } from "@/server/settings.server";
 import { TabsContent } from "@/components/ui/tabs";

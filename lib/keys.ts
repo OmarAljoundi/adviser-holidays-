@@ -7,3 +7,12 @@ export const ATTACHMENT_PATH = 'External_Attachemnts'
 export const REVALIDATE_CONTENT_LIST = 'REVALIDATE_CONTENT_LIST'
 export const SETTING_PATH = 'Setting'
 export const CONFIG_PATH = 'configuration.json'
+
+
+export const HOME_PAGE = "HOME_PAGE"
+export const CONFIGURATION_PAGE = "CONFIGURATION_PAGE"
+export const TOUR_LISTING_PAGE = "TOUR_LISTING_PAGE"
+export const TOUR_LISTING_DEST_PAGE = "TOUR_LISTING_DEST_PAGE"
+export const TOUR_DETAILS_PAGE = "TOUR_DETAILS_PAGE"
+
+

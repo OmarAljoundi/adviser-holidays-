@@ -5,7 +5,9 @@ import { REVALIDATE_LOCATION_LIST } from "@/lib/keys";
 import { QueryLocationSchema } from "@/schema";
 import { getDestinations } from "@/server/public-query.server";
 import { useQuery } from "@tanstack/react-query";
+import { Awaitable } from "better-auth";
 import Link from "next/link";
+import { use } from "react";
 import { BsAirplane } from "react-icons/bs";
 
 export function getTotalToursSeprate(location: QueryLocationSchema) {
@@ -39,12 +41,9 @@ function getWordTotalSeprate(total: number) {
   }
 }
 
-const DestinationListing = () => {
-  const { data: destinations } = useQuery({
-    queryKey: [REVALIDATE_LOCATION_LIST],
-    queryFn: async () => await getDestinations(),
-  });
+const DestinationListing = ({dataDestination}:{dataDestination:ReturnType<typeof getDestinations>}) => {
 
+  const destinations = use(dataDestination)
   return (
     <div className="container mt-24 mb-10 ">
       <h1 className="text-3xl text-center">الأقسام</h1>

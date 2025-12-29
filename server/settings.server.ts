@@ -3,7 +3,7 @@
 import { db } from "@/db.server";
 import { Setting } from "@/generated/prisma/client";
 import { SettingSchema } from "@/schema/setting-schema";
-import { unstable_noStore } from "next/cache";
+import { revalidateDestination } from "./revalidation.server";
 
 export async function getSettingBySectionAsync(section: "CMS") {
   const record = await db.setting.findFirst({
@@ -19,9 +19,8 @@ export async function addUpdateSettingAsync(
   value: Setting["value"],
   mode: "add" | "update"
 ): Promise<{ section: string | null; success: boolean }> {
-  unstable_noStore();
   try {
-    if (mode == "update") {
+    if (mode === "update") {
       await db.setting.update({
         where: {
           section,
@@ -30,16 +29,16 @@ export async function addUpdateSettingAsync(
           value: value as any,
         },
       });
-
-      return { section, success: true };
+    } else {
+      await db.setting.create({
+        data: {
+          value: value as any,
+          section,
+        },
+      });
     }
 
-    await db.setting.create({
-      data: {
-        value: value as any,
-        section,
-      },
-    });
+    await revalidateDestination();
 
     return { section, success: true };
   } catch (ex) {

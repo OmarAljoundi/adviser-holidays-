@@ -1,4 +1,3 @@
-import { revalidateStaticPages } from "@/server/revalidation.server";
 import { tourTypeUpdateOrders } from "@/server/tour-types.server";
 import { useMutation } from "@tanstack/react-query";
 import { useId } from "react";
@@ -9,7 +8,6 @@ export function useTourTypeCard() {
   const sortingUpdateMutation = useMutation({
     mutationFn: async ({ data }: { data: { id: number; order: number }[] }) => {
       const result = await tourTypeUpdateOrders(data);
-      await revalidateStaticPages();
       return result;
     },
     mutationKey: ["Order-update-tour-types", uniqueId],

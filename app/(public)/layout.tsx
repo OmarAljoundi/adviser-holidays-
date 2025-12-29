@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic";
 import { Cairo } from "next/font/google";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
@@ -12,6 +11,7 @@ import Footer from "@/layout/footer";
 import NextUIProvider from "@/provider/next-ui-provider";
 import ReactQueryProvider from "@/provider/react-query-provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Suspense } from "react";
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
   display: "swap",
@@ -33,9 +33,12 @@ export default function RootLayout({
         <NuqsAdapter>
           <ReactQueryProvider>
             <NextUIProvider>
-              <Menu />
-              {children}
-              <Footer />
+                <Suspense>
+                  <Menu />
+                </Suspense>
+                {children}
+
+                <Footer />
             </NextUIProvider>
           </ReactQueryProvider>
         </NuqsAdapter>

@@ -383,7 +383,6 @@ function CardItemComponent(location: QueryLocationSchema) {
         deleteFunction={() => locationDelete({ where: { id: location.id } })}
         mutationOptions={{
           mutationKey: ["Delete-Location", location.id],
-          onSuccess: async () => await revalidateDestination(location.slug),
         }}
       />
     </React.Fragment>

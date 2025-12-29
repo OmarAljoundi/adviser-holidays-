@@ -8,7 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { updateTourSchema, UpdateTourSchema } from "@/schema";
 import { tourUpdate } from "@/server/tours.server";
 import { TourForm } from "./form";
-import { revalidateTour } from "@/server/revalidation.server";
+import { revalidateDestination } from "@/server/revalidation.server";
 
 export function UpdateTour({ tour }: { tour: UpdateTourSchema }) {
   const { id } = useParams();
@@ -26,8 +26,7 @@ export function UpdateTour({ tour }: { tour: UpdateTourSchema }) {
       where: { id: Number(id) },
     });
     if (result.id) {
-      await revalidateTour(body.slug!);
-      await revalidateTour(tour.slug!);
+      await revalidateDestination()
       toast.success("Tour update successfully");
       route.replace(`/admin/collections/tours/${result.id}`);
       route.refresh();

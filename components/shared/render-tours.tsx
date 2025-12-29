@@ -5,6 +5,7 @@ import TourCard from "./tour-card";
 import { QueryTourSchema } from "@/schema";
 import { parseAsArrayOf, parseAsString, useQueryStates } from "nuqs";
 import { CardsLoading } from "./cards-loading";
+import { ToursNotFound } from "./tours-not-found";
 
 const RenderTours = ({ tours }: { tours: QueryTourSchema[] }) => {
   const [filter, _] = useQueryStates(
@@ -38,6 +39,9 @@ const RenderTours = ({ tours }: { tours: QueryTourSchema[] }) => {
   });
 
   if (isLoading) return <CardsLoading />;
+
+    if(isLoading == false && (!data || data.length == 0))
+    return <ToursNotFound />
 
   return (
     <div className="mt-4 mb-16">

@@ -76,9 +76,7 @@ export async function getTourTypes() {
   return tourTypes.map((o) => queryTourTypeSchema.parse(o));
 }
 
-export async function getAttributesBySlug(
-  slug: string,
-) {
+export async function getAttributesBySlug(slug: string) {
   const destination = await db.location.findFirst({
     where: {
       isActive: true,
@@ -102,7 +100,7 @@ export async function getAttributesBySlug(
 
 export async function getToursByAttributes(
   slug: string,
-  attributeSlug?: string,
+  attributeSlug?: string
 ) {
   const destination = await db.location.findFirst({
     orderBy: { order: "asc" },
@@ -117,7 +115,7 @@ export async function getToursByAttributes(
             where: {
               tour: {
                 isActive: true,
-                OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }],
+                OR: [{ priceSingleJo: { gt: 0 } }, { priceDoubleJo: { gt: 0 } }],
               },
             },
 
@@ -135,10 +133,8 @@ export async function getToursByAttributes(
                   images: true,
                   id: true,
                   isActive: true,
-                  priceDouble: true,
-                  priceDoubleSa: true,
-                  priceSingle: true,
-                  priceSingleSa: true,
+                  priceSingleJo:true,
+                  priceDoubleJo:true,
                   slug: true,
                   startDay: true,
                   tourCountries: true,
@@ -186,7 +182,10 @@ export async function getToursByAttributes(
 
 export async function getTours() {
   const tours = await db.tour.findMany({
-    where: { isActive: true },
+    where: {
+      isActive: true,
+      OR: [{ priceSingleJo: { gt: 0 } }, { priceDoubleJo: { gt: 0 } }],
+    },
     select: {
       name: true,
       numberOfDays: true,
@@ -194,10 +193,8 @@ export async function getTours() {
       images: true,
       id: true,
       isActive: true,
-      priceDouble: true,
-      priceDoubleSa: true,
-      priceSingle: true,
-      priceSingleSa: true,
+      priceDoubleJo:true,
+      priceSingleJo:true,
       slug: true,
       startDay: true,
       tourCountries: true,
@@ -217,64 +214,6 @@ export async function getTours() {
 }
 
 export async function getTourDetails(slug: string) {
-  const tour = await db.tour.findFirst({
-    where: {
-      isActive: true,
-      slug,
-      OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }],
-    },
-    include: {
-      tourType: true,
-    },
-  });
-
-  if (tour) return queryTourSchema.parse(tour);
-
-  return undefined;
-}
-
-export async function getOfficeTours() {
-  let orderBy = {};
-
-  orderBy = {
-    priceDoubleJo: "asc",
-  };
-
-  const results = await db.tour.findMany({
-    where: {
-      OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }],
-    },
-    select: {
-      name: true,
-      numberOfDays: true,
-      code: true,
-      images: true,
-      id: true,
-      isActive: true,
-      priceDouble: true,
-      priceDoubleSa: true,
-      priceSingle: true,
-      priceSingleSa: true,
-      slug: true,
-      startDay: true,
-      tourCountries: true,
-      tourType: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-    orderBy,
-  });
-
-  const parsedResult = results.map((p) => queryTourSchema.parse(p));
-
-  return parsedResult;
-}
-
-export async function getTourOfficeDetails(slug: string) {
   const tour = await db.tour.findFirst({
     where: {
       isActive: true,

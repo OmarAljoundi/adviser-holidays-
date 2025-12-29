@@ -105,7 +105,7 @@ function InternalForm({
   const updateMutation = useMutation({
     mutationFn: async (data: any) => {
       await locationUpdate(data);
-      await revalidateDestination(location.slug);
+      await revalidateDestination();
     },
     onSuccess: () => {
       toast.success("Location attributes updated successfully.");

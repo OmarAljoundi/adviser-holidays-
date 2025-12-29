@@ -49,7 +49,6 @@ export function SeoDialogForm({
       data: { seo: parsedBody.seo },
       where: { id: defaultValues.id },
     });
-    await revalidateDestination(defaultValues.slug!);
 
     toast.success("Destination SEO saved successfully");
     onOpenChange(false);

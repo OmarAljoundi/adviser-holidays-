@@ -3,6 +3,7 @@
 import { db } from "@/db.server";
 import { Prisma } from "@/generated/prisma/client";
 import { unstable_noStore } from "next/cache";
+import { revalidateDestination } from "./revalidation.server";
 
 export type TourFilters = {
   country?: string | null;
@@ -34,6 +35,8 @@ export async function tourUpdate<T extends Prisma.TourUpdateArgs>(
 ): Promise<Prisma.TourGetPayload<T>> {
   unstable_noStore();
   const result = await db.tour.update(args);
+  await revalidateDestination();
+
   return result;
 }
 
@@ -45,6 +48,8 @@ export async function tourDelete<T extends Prisma.TourDeleteArgs>(
 ): Promise<Prisma.TourGetPayload<T>> {
   unstable_noStore();
   const result = await db.tour.delete(args);
+  await revalidateDestination();
+
   return result;
 }
 
@@ -65,6 +70,8 @@ export async function tourCreate<T extends Prisma.TourCreateArgs>(
 ): Promise<Prisma.TourGetPayload<T>> {
   unstable_noStore();
   const result = await db.tour.create(args);
+  await revalidateDestination();
+
   return result;
 }
 
@@ -76,13 +83,10 @@ export async function tourSearch({
   cursor,
   limit = 30,
   filters = {},
-  currency = "SAR",
 }: TourSearchParams) {
   const where: Prisma.TourWhereInput = {
     isActive: true,
-    ...(currency === "SAR"
-      ? { OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }] }
-      : { OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }] }),
+        OR: [{ priceSingleJo: { gt: 0 } }, { priceDoubleJo: { gt: 0 } }] 
   };
 
   if (filters.type) {
@@ -130,10 +134,8 @@ export async function tourSearch({
       images: true,
       id: true,
       isActive: true,
-      priceDouble: true,
-      priceDoubleSa: true,
-      priceSingle: true,
-      priceSingleSa: true,
+      priceDoubleJo:true,
+      priceSingleJo:true,
       slug: true,
       startDay: true,
       tourCountries: true,
@@ -147,9 +149,7 @@ export async function tourSearch({
       },
     },
     orderBy:
-      currency === "SAR"
-        ? [{ priceDoubleSa: "asc" }, { id: "asc" }]
-        : [{ priceDouble: "asc" }, { id: "asc" }],
+         [{ priceDoubleJo: "asc" }, { id: "asc" }],
   });
 
   const hasMore = tours.length > limit;

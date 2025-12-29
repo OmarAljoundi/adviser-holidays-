@@ -1,4 +1,3 @@
-export const revalidate = 0;
 import ContentWrapper from "@/components/admin-panel/contet-wrapper";
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
 import React, { Suspense } from "react";

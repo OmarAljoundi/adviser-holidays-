@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { FunctionComponent } from "react";
+import { FunctionComponent, Suspense } from "react";
 import TourBreadcrumb from "./tour-breadcrumb";
 import TourImages from "./tour-images";
 import TourInitailInfo from "./tour-initail-info";
@@ -9,56 +9,22 @@ import TourBenfits from "./tour-benfits";
 import TourHotels from "./tour-hotels";
 import TourAdditionalInfo from "./tour-additional-info";
 import { getTourDetails } from "@/server/public-query.server";
-
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: { slug: string };
-// }): Promise<Metadata> {
-//   const response = (await getTours())?.find(
-//     (x) => x.slug == decodeURIComponent(params.slug) && x.is_active
-//   );
-//   if (!response) {
-//     return {
-//       title: "No tour found",
-//     };
-//   }
-
-//   const { description, tags, title } = response.seo || {
-//     title: "",
-//     description: "",
-//     tags: "",
-//   };
-//   return {
-//     metadataBase: new URL(process.env.NEXT_PUBLIC_URL!),
-//     title: title,
-//     description: description,
-//     openGraph: {
-//       title: title,
-//       description: description,
-//       type: "website",
-//       siteName: "Adviser holidays",
-//     },
-//     keywords: tags,
-//   };
-// }
-// export async function generateStaticParams() {
-//   const response = await getTours();
-//   if (response && response.length > 0) {
-//     return response
-//       .filter((x) => x.is_active)
-//       .map((tour) => ({
-//         slug: `${tour.slug}`,
-//       }));
-//   }
-//   return [];
-// }
+import LoadingTour from "./loading-tour";
 
 const TourPage: FunctionComponent<{
   params: Promise<{ slug: string }>;
 }> = async ({ params }) => {
-  const { slug } = await params;
 
+  return (
+    <Suspense fallback={<LoadingTour />}>
+      <RenderTourPage params={params} />
+    </Suspense>
+  );
+};
+
+async function RenderTourPage({ params }: { params: Promise<{ slug: string }> }) {
+  "use cache";
+  const {slug} = await params
   const result = await getTourDetails(decodeURIComponent(slug));
 
   if (!result) return notFound();
@@ -85,6 +51,5 @@ const TourPage: FunctionComponent<{
       </div>
     </div>
   );
-};
-
+}
 export default TourPage;

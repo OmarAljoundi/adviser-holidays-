@@ -1,4 +1,3 @@
-export const revalidate = 0;
 import ContentWrapper from "@/components/admin-panel/contet-wrapper";
 import  { Suspense } from "react";
 import { locationQuery } from "@/server/location.server";

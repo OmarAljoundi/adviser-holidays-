@@ -1,10 +1,12 @@
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  cacheComponents:true,
   images: {
-    qualities:[100,75],
+    qualities:[100,75,80],
     minimumCacheTTL: 86400,
     deviceSizes: [640, 1080, 1200],
+    
     remotePatterns: [
       {
         hostname: "fdbllwtbkackirdugunj.supabase.co",

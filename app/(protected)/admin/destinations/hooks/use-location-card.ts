@@ -24,8 +24,6 @@ export function useLocationCard() {
       >["data"];
     }) => {
       await locationUpdate({ where: { id }, data });
-      await revalidateDestination(data.slug! as string);
-      await revalidateDestination(oldSlug);
     },
     mutationKey: ["Action-update", uniqueId],
     onSuccess: () => {
