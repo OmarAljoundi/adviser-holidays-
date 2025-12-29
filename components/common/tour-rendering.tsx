@@ -19,11 +19,11 @@ const TourRendering: FC<{ tourIds?: number[] }> = ({ tourIds }) => {
 
   const { data: tours } = useQuery({
     queryKey: [REVALIDATE_TOUR_LIST],
-    queryFn: async () => await getTours("SAR"),
+    queryFn: async () => await getTours(),
     select: (response) => {
       return tourIds
-        ? response?.result?.filter((m) => tourIds.includes(m.id!) && m.isActive)
-        : response?.result?.filter((x) => x.isActive);
+        ? response?.filter((m) => tourIds.includes(m.id!) && m.isActive)
+        : response?.filter((x) => x.isActive);
     },
   });
 
@@ -36,8 +36,8 @@ const TourRendering: FC<{ tourIds?: number[] }> = ({ tourIds }) => {
   const currentTours = useMemo(() => {
     return filterTours(
       {
-        country: searchParams?.get("country") as string,
-        days: searchParams?.get("days") as string,
+        country: searchParams?.get("country") as unknown as string[],
+        days: searchParams?.get("days") as unknown as string[],
         type: searchParams?.get("type") as string,
         sortMemebr: searchParams?.get("sortMemebr"),
         maxprice: searchParams?.get("maxprice") as any,

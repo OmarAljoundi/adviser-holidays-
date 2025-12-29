@@ -1,10 +1,8 @@
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
+    qualities:[100,75],
     minimumCacheTTL: 86400,
     deviceSizes: [640, 1080, 1200],
     remotePatterns: [

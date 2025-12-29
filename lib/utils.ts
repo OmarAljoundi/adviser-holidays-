@@ -1,7 +1,7 @@
 import { QueryLocationSchema, QueryTourSchema } from "@/schema";
-import { Tour } from "@/types/custom";
 import { Order } from "@/types/search";
 import { type ClassValue, clsx } from "clsx";
+import { createHash } from "crypto";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -10,6 +10,15 @@ export function cn(...inputs: ClassValue[]) {
 export type FunctionKeys<T> = {
   [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
 }[keyof T];
+
+export function isCreationPage(firstParma: string) {
+  if (firstParma == "new") {
+    return { isCreation: true, id: firstParma };
+  }
+
+  return { isCreation: false, id: firstParma };
+}
+
 
 export const europeanCountries = [
   { label: "النمسا", countryCode: "AT" },
@@ -342,4 +351,8 @@ export function getTotalSearchCount(search?: QueryString) {
   }
 
   return total;
+}
+
+export function hashString(str: string): string {
+  return createHash("sha256").update(str).digest("hex").substring(0, 32);
 }

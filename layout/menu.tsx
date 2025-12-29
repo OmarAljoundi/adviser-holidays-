@@ -37,7 +37,7 @@ const Menu = () => {
             width={1080}
             height={1080}
             className="max-w-[50px]"
-            alt="ديسكفري لوجو"
+            alt="لوجو"
           />
         </Link>
 

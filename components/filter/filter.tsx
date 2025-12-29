@@ -62,7 +62,7 @@ const Filter: FC<FilterOptions> = ({
               variants={{ ...ITEMS_VAR }}
               className="lg:px-4 first:lg:pr-0 last:lg:pl-0 col-span-full lg:col-span-1"
             >
-              <DestinationDropdown destinations={destinations?.result || []} />
+              <DestinationDropdown destinations={destinations || []} />
             </motion.div>
             <Separator className="lg:hidden col-span-full " />
           </React.Fragment>

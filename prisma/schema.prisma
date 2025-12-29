@@ -1,0 +1,194 @@
+datasource db {
+  provider = "postgresql"
+  
+}
+
+generator client {
+  provider = "prisma-client"
+  output = "../generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+
+}
+
+
+model Location {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  image             Json?
+  order             Int                 @default(1)
+  isActive          Boolean?            @map("is_active")
+  showOnService     Boolean             @default(true) @map("show_on_service")
+  showOnEurope      Boolean             @default(false) @map("show_on_europe")
+  seo               Json?
+  slug              String?
+  createdAt         DateTime            @default(now()) @map("created_at")
+  attributes        LocationAttribute[]
+  locationTours     LocationTour[]
+
+  @@map("location")
+}
+
+model LocationAttribute {
+  id              Int            @id @default(autoincrement())
+  title           String?
+  order           Int?
+  seo             Json?
+  locationId      Int?           @map("location_id")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  location        Location?      @relation(fields: [locationId], references: [id],onDelete: Cascade)
+  locationTours   LocationTour[]
+
+  @@map("location_attributes")
+}
+
+model LocationTour {
+  id              Int               @id @default(autoincrement())
+  locationId      Int               @map("location_id")
+  locationAttrId  Int               @map("location_attr_id")
+  tourId          Int               @map("tour_id")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  location        Location          @relation(fields: [locationId], references: [id],onDelete: Cascade)
+  locationAttr    LocationAttribute @relation(fields: [locationAttrId], references: [id],onDelete: Cascade)
+  tour            Tour              @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@map("location_tours")
+}
+
+
+
+model Tour {
+  id                Int            @id @default(autoincrement())
+  name              String
+  numberOfDays      Int            @map("number_of_days")
+  code              String?
+  slug              String?
+  images            String[]       @default([])
+  seo               Json?
+  isActive          Boolean?       @map("is_active")
+  isTicketIncluded  Boolean?       @map("is_ticket_included")
+  startDay          String[]       @map("start_day") @default([])
+  priceSingle       Float?         @map("price_single")
+  priceDouble       Float?         @map("price_double")
+  priceSingleSa     Float?         @map("price_single_sa")
+  priceDoubleSa     Float?         @map("price_double_sa")
+  priceSingleJo     Float?         @map("price_single_jo")
+  priceDoubleJo     Float?         @map("price_double_jo")
+  tourPrices        Json[]         @map("tour_prices")
+  tourCountries     String[]       @map("tour_countries") @default([])
+  tourHotels        String[]       @map("tour_hotels") @default([])
+  tourIncludes      Json[]         @map("tour_includes") @default([])
+  tourExcludes      Json[]         @map("tour_excludes") @default([])
+  tourSections      Json[]         @map("tour_sections") @default([])
+  airpotComing      String?         @map("airpot_coming")
+  airpotGoing       String?         @map("airpot_going")
+  additionalInfo    String?         @map("additional_Info")
+  additionalService Json[]         @map("additional_service") @default([])
+  externalFile      Json?          @map("external_file")
+  typeId            Int?           @map("type_id")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  tourType          TourType?      @relation(fields: [typeId], references: [id])
+  locationTours     LocationTour[]
+
+  @@map("tour")
+}
+
+model TourType {
+  id              Int       @id @default(autoincrement())
+  name            String?
+  image           Json      @default("{}")
+  showOnService   Boolean   @default(true) @map("show_on_service")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  tours           Tour[]
+  order           Int       @default(1)
+
+  @@map("tour_type")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String?
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+
+  passkeys Passkey[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model Passkey {
+  id           String    @id
+  name         String?
+  publicKey    String
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID String
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime?
+
+  @@map("passkey")
+}
+
+
+model Setting {
+  id                      Int        @id @default(autoincrement())
+  section                 String     @unique
+  value                   Json  
+  createdBy               String     @default("admin") 
+  createdAt               DateTime   @default(now()) 
+  updatedAt               DateTime   @updatedAt 
+
+  @@map("setting")
+}

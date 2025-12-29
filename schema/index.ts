@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { v4 as uuidv4 } from "uuid";
 
 export const customerSchema = z.object({
   id: z.number().int().positive(),
@@ -6,23 +7,32 @@ export const customerSchema = z.object({
   phoneNumber: z.string().min(1),
   contactMethod: z.string().min(1),
   status: z.number().int().default(1),
-  notes: z.string().optional(),
-  createdAt: z.date().default(new Date()),
+  notes: z.string().nullable().optional(),
+  createdAt: z.coerce.date().default(new Date()),
   tourId: z.number().int().positive().optional().nullable(),
 });
 
 export const locationSchema = z.object({
   id: z.number().default(0),
-  name: z.string().min(1),
-  image: z.object({ url: z.string(), alt: z.string().optional() }).optional(),
+  name: z
+    .string({ error: "Name is required to be filled" })
+    .min(1, "Name is required to be filled"),
+  image: z.object(
+    {
+      url: z.string().min(1, "Image is required"),
+      alt: z.string().optional(),
+    },
+    { error: "Image is required to be filled" }
+  ),
   isActive: z.boolean().default(true),
-  isOffice: z.boolean().default(false),
-  showOnService: z.boolean().default(true),
+  showOnService: z.boolean().default(false),
   showOnEurope: z.boolean().default(false),
   order: z.number().default(1),
   seo: z.any().optional().nullable(),
-  slug: z.string().optional().nullable(),
-  createdAt: z.date().default(new Date()),
+  slug: z
+    .string({ error: "Slug is required to be filled" })
+    .min(1, "Slug is required to be filled"),
+  createdAt: z.coerce.date().default(new Date()),
 });
 
 export const locationAttributeSchema = z.object({
@@ -31,7 +41,7 @@ export const locationAttributeSchema = z.object({
   order: z.number().int().optional().nullable(),
   seo: z.any().optional().nullable(),
   locationId: z.number().int().positive().optional().nullable(),
-  createdAt: z.date().default(new Date()),
+  createdAt: z.coerce.date().default(new Date()),
 });
 
 export const locationTourSchema = z.object({
@@ -39,7 +49,7 @@ export const locationTourSchema = z.object({
   locationId: z.number().int().positive(),
   locationAttrId: z.number().int().positive(),
   tourId: z.number().int().positive(),
-  createdAt: z.date().default(new Date()),
+  createdAt: z.coerce.date().default(new Date()),
 });
 
 export const officeSchema = z.object({
@@ -61,15 +71,22 @@ export const officeSchema = z.object({
   socialMedia: z.array(z.any()).default([]),
   seo: z.any().optional().nullable(),
   status: z.boolean().optional().nullable(),
-  createdAt: z.date().default(new Date()),
+  createdAt: z.coerce.date().default(new Date()),
 });
 
 export const tourTypeSchema = z.object({
   id: z.number().default(0),
-  name: z.string().optional().nullable(),
-  image: z.string().min(1),
+  name: z.string().min(1, "Tour type name is required"),
+  image: z.object(
+    {
+      url: z.string().min(1, "Image is required"),
+      alt: z.string().optional(),
+    },
+    { error: "Image is required to be filled" }
+  ),
   showOnService: z.boolean().default(true),
-  createdAt: z.date().default(new Date()),
+  createdAt: z.coerce.date().default(new Date()),
+  order: z.number().default(1),
 });
 
 export const tourSchema = z.object({
@@ -87,6 +104,8 @@ export const tourSchema = z.object({
   priceDouble: z.number().optional().nullable(),
   priceSingleSa: z.number().optional().nullable(),
   priceDoubleSa: z.number().optional().nullable(),
+  priceSingleJo: z.number().optional().nullable(),
+  priceDoubleJo: z.number().optional().nullable(),
   tourPrices: z
     .array(
       z.object({
@@ -103,6 +122,7 @@ export const tourSchema = z.object({
   tourIncludes: z
     .array(
       z.object({
+        id: z.string().default(uuidv4),
         uuid: z.string(),
         title: z.string(),
         description: z.string(),
@@ -112,6 +132,7 @@ export const tourSchema = z.object({
   tourExcludes: z
     .array(
       z.object({
+        id: z.string().default(uuidv4),
         uuid: z.string(),
         title: z.string(),
         description: z.string(),
@@ -121,6 +142,7 @@ export const tourSchema = z.object({
   tourSections: z
     .array(
       z.object({
+        id: z.string().default(uuidv4),
         uuid: z.string(),
         title: z.string(),
         description: z.string(),
@@ -137,7 +159,7 @@ export const tourSchema = z.object({
     .optional()
     .nullable()
     .transform(Number),
-  createdAt: z.date().default(new Date()),
+  createdAt: z.coerce.date().default(new Date()),
 });
 
 export const createCustomerSchema = customerSchema.omit({

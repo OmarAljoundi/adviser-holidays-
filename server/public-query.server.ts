@@ -1,121 +1,292 @@
 "use server";
-import { CONFIG_PATH, SETTING_PATH } from "@/lib/keys";
-import { supabaseClient } from "@/lib/supabaseClient";
+import { db } from "@/db.server";
 import {
-  QueryLocationSchema,
-  QueryOfficeSchema,
+  queryLocationSchema,
   QueryTourSchema,
+  queryTourSchema,
+  queryTourTypeSchema,
 } from "@/schema";
-import { Setting } from "@/types/custom";
+import { settingSchema } from "@/schema/setting-schema";
+import { auth } from "@/auth";
+import { NextRequest } from "next/server";
 
-export async function getSiteData(domain: string) {
-  const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-    ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
-    : null;
+export async function getSession(request: NextRequest) {
+  return await auth.api.getSession({
+    query: {
+      disableCookieCache: false,
+    },
+    headers: request.headers,
+  });
+}
 
-  const result = await fetch(
-    `${process.env.BACKEND_API}/offices/${subdomain}`,
-    { next: { revalidate: 86400 } }
-  );
+export async function getBestTours() {
+  const settings = await db.setting.findFirst({
+    where: { section: "CMS" },
+  });
 
-  if (result.status == 200) {
-    return (await result.json()) as {
-      result: {
-        bestTours: QueryTourSchema[];
-        details: QueryOfficeSchema;
-        faq: { id: string; title: string; description: string }[];
-        pricingFilter: {
-          arCurrency: string;
-          minPrice: number;
-          maxPrice: number;
-        };
-      };
-    };
-  }
+  if (!settings) return [];
 
-  return undefined;
+  const settingsParsed = settingSchema.parse(settings.value);
+  const tours = await db.tour.findMany({
+    where: {
+      id: { in: settingsParsed.home.bestTours.map((o) => o.id) },
+      isActive: true,
+      OR: [{ priceSingleJo: { gt: 0 } }, { priceDoubleJo: { gt: 0 } }],
+    },
+    include: {
+      tourType: true,
+    },
+  });
+
+  if (tours) return tours.map((o) => queryTourSchema.parse(o));
+
+  return [];
 }
 
 export async function getDestinations() {
-  const result = await fetch(`${process.env.BACKEND_API}/destinations`, {
-    next: { revalidate: 86400 },
+  const destinations = await db.location.findMany({
+    where: {
+      isActive: true,
+    },
+    include: {
+      attributes: {
+        select: {
+          id: true,
+          _count: true,
+          order: true,
+          title: true,
+        },
+        orderBy: {
+          order: "asc",
+        },
+      },
+    },
+    orderBy: {
+      order: "asc",
+    },
   });
 
-  if (result.status == 200) {
-    return (await result.json()) as {
-      result: Array<QueryLocationSchema>;
-    };
+  return destinations.map((o) => queryLocationSchema.parse(o));
+}
+
+export async function getTourTypes() {
+  const tourTypes = await db.tourType.findMany({
+    orderBy: { order: "asc" },
+  });
+  return tourTypes.map((o) => queryTourTypeSchema.parse(o));
+}
+
+export async function getAttributesBySlug(
+  slug: string,
+) {
+  const destination = await db.location.findFirst({
+    where: {
+      isActive: true,
+      slug,
+    },
+    include: {
+      attributes: {
+        orderBy: {
+          order: "asc",
+        },
+      },
+    },
+  });
+
+  if (destination) {
+    return queryLocationSchema.parse(destination);
   }
+
   return undefined;
 }
 
-export async function getDestination(slug: string, currency: string) {
-  const result = await fetch(
-    `${process.env.BACKEND_API}/destinations/${slug}?currency=${currency}`,
-    { next: { revalidate: 86400 } }
-  );
+export async function getToursByAttributes(
+  slug: string,
+  attributeSlug?: string,
+) {
+  const destination = await db.location.findFirst({
+    orderBy: { order: "asc" },
+    where: {
+      slug,
+      isActive: true,
+    },
+    include: {
+      attributes: {
+        include: {
+          locationTours: {
+            where: {
+              tour: {
+                isActive: true,
+                OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }],
+              },
+            },
 
-  if (result.status == 200) {
-    return (await result.json()) as {
-      result: { tours: Array<QueryTourSchema>; destinationName: string };
+            orderBy: {
+              tour: { priceDoubleJo: "asc" },
+            },
+            include: {
+              locationAttr: true,
+              location: true,
+              tour: {
+                select: {
+                  name: true,
+                  numberOfDays: true,
+                  code: true,
+                  images: true,
+                  id: true,
+                  isActive: true,
+                  priceDouble: true,
+                  priceDoubleSa: true,
+                  priceSingle: true,
+                  priceSingleSa: true,
+                  slug: true,
+                  startDay: true,
+                  tourCountries: true,
+                  tourType: {
+                    select: {
+                      id: true,
+                      name: true,
+                      image: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!destination || destination.attributes.length == 0)
+    return {
+      tours: [] as QueryTourSchema[],
+      destinationName: destination?.name,
     };
-  }
-  return undefined;
-}
 
-export async function getTours(currency: string) {
-  const result = await fetch(
-    `${process.env.BACKEND_API}/tours?currency=${currency}`,
-    {
-      next: { revalidate: 86400 },
-    }
-  );
-
-  if (result.status == 200) {
-    return (await result.json()) as {
-      result: Array<QueryTourSchema>;
-    };
-  }
-  return undefined;
-}
-
-export async function getTourDetails(slug: string, currency: string) {
-  const result = await fetch(
-    `${process.env.BACKEND_API}/tours/${slug}?currency=${currency}`,
-    {
-      next: { revalidate: 86400 },
-    }
-  );
-
-  if (result.status == 200) {
-    return (await result.json()) as {
-      result: QueryTourSchema;
-    };
-  }
-  return undefined;
-}
-
-export const getContentData = async () => {
-  const { data } = await supabaseClient.storage
-    .from("Adviser")
-    .list(SETTING_PATH);
-
-  let responseData: Setting | undefined;
-
-  if (data && data.length > 0 && data.find((x) => x.name === CONFIG_PATH)) {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_IMAGE_URL}/${SETTING_PATH}/${CONFIG_PATH}`,
-      {
-        next: { revalidate: 0 },
-      }
+  if (destination.attributes.length == 1) {
+    const tours = destination.attributes[0].locationTours.map((o) =>
+      queryTourSchema.parse(o.tour)
     );
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status: ${response.status}`);
-    }
-
-    responseData = (await response.json()) as Setting;
-
-    return responseData;
+    return { tours: tours, destinationName: destination?.name };
   }
-};
+
+  if (!attributeSlug) {
+    throw new Error("Attribute slug must be provided");
+  }
+
+  const tours =
+    destination.attributes
+      .find((x) => x.title == attributeSlug.replaceAll("-", " "))
+      ?.locationTours.map((o) => queryTourSchema.parse(o.tour)) ?? [];
+
+  return { tours: tours, destinationName: destination?.name };
+}
+
+export async function getTours() {
+  const tours = await db.tour.findMany({
+    where: { isActive: true },
+    select: {
+      name: true,
+      numberOfDays: true,
+      code: true,
+      images: true,
+      id: true,
+      isActive: true,
+      priceDouble: true,
+      priceDoubleSa: true,
+      priceSingle: true,
+      priceSingleSa: true,
+      slug: true,
+      startDay: true,
+      tourCountries: true,
+      tourType: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+  });
+
+  if (tours) return tours.map((o) => queryTourSchema.parse(o));
+
+  return [];
+}
+
+export async function getTourDetails(slug: string) {
+  const tour = await db.tour.findFirst({
+    where: {
+      isActive: true,
+      slug,
+      OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }],
+    },
+    include: {
+      tourType: true,
+    },
+  });
+
+  if (tour) return queryTourSchema.parse(tour);
+
+  return undefined;
+}
+
+export async function getOfficeTours() {
+  let orderBy = {};
+
+  orderBy = {
+    priceDoubleJo: "asc",
+  };
+
+  const results = await db.tour.findMany({
+    where: {
+      OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }],
+    },
+    select: {
+      name: true,
+      numberOfDays: true,
+      code: true,
+      images: true,
+      id: true,
+      isActive: true,
+      priceDouble: true,
+      priceDoubleSa: true,
+      priceSingle: true,
+      priceSingleSa: true,
+      slug: true,
+      startDay: true,
+      tourCountries: true,
+      tourType: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+    orderBy,
+  });
+
+  const parsedResult = results.map((p) => queryTourSchema.parse(p));
+
+  return parsedResult;
+}
+
+export async function getTourOfficeDetails(slug: string) {
+  const tour = await db.tour.findFirst({
+    where: {
+      isActive: true,
+      slug,
+      OR: [{ priceSingleJo: { gt: 0 } }, { priceDoubleJo: { gt: 0 } }],
+    },
+    include: {
+      tourType: true,
+    },
+  });
+
+  if (tour) return queryTourSchema.parse(tour);
+
+  return undefined;
+}

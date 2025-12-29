@@ -1,15 +1,14 @@
 "use client";
-import { getDestination, getTours } from "@/server/public-query.server";
-import React, { use } from "react";
+import { getToursByAttributes, getTours } from "@/server/public-query.server";
+import  { use } from "react";
 import RenderTours from "./render-tours";
 
 export function RenderToursFromDest({
-  dataPromise,
+  result,
 }: {
-  dataPromise: ReturnType<typeof getDestination>;
+  result: Awaited<ReturnType<typeof getToursByAttributes>>;
 }) {
-  const result = use(dataPromise);
-  return <RenderTours tours={result?.result?.tours ?? []} />;
+  return <RenderTours tours={result?.tours ?? []} />;
 }
 
 export function RenderToursFromListing({
@@ -18,5 +17,5 @@ export function RenderToursFromListing({
   dataPromise: ReturnType<typeof getTours>;
 }) {
   const result = use(dataPromise);
-  return <RenderTours tours={result?.result ?? []} />;
+  return <RenderTours tours={result ?? []} />;
 }

@@ -9,7 +9,7 @@ export const seoSchema = z
       .array()
       .nullable()
       .default([]),
-    media: z.object({ url: z.string(), alt: z.string().optional() }).optional(),
+    media: z.object({ url: z.string(), alt: z.string().optional() }).nullish(),
   })
   .default({
     description: "",

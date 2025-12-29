@@ -81,7 +81,12 @@ export const COUNTRIES = [
   { label: "ألبانيا", countryCode: "AL" },
   { label: "سلوفينيا", countryCode: "SI" },
 ];
-
+export const COUNTRIESASOPTIONS = COUNTRIES.map(({ label }) => {
+  return {
+    label,
+    value: label,
+  };
+});
 export const DAYS = [
   "السبت",
   "الأحد",
@@ -93,6 +98,13 @@ export const DAYS = [
   "كل يوم",
 ];
 
+
+export const DAYSASOPTIONS = DAYS.map((label) => {
+  return {
+    label,
+    value: label,
+  };
+});
 export const IMAGE_SIZES = [
   {
     size: "1/3",

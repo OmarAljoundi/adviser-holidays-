@@ -24,6 +24,10 @@ const config: Config = {
         secondary: ["var(--font-secondary)"],
         english: ["var(--font-english)"],
         weird: ["var(--font-weird)"],
+        "arabic-body": "var(--font-arabic-body)",
+        "arabic-header": "var(--font-arabic-header)",
+
+
       },
       boxShadow: {
         card: "var(--card-shadow)",
@@ -78,6 +82,16 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+         sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -106,7 +120,7 @@ const config: Config = {
     require("tailwindcss-animate"),
     nextui({
       layout: {
-        spacingUnit: 4, // in px
+        
         disabledOpacity: 0.5, // this value is applied as opacity-[value] when the component is disabled
         dividerWeight: "1px", // h-divider the default height applied to the divider component
         fontSize: {
