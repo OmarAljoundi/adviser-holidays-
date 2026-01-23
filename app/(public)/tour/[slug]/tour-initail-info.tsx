@@ -21,7 +21,7 @@ const TourInitailInfo: FunctionComponent<TourInitailInfoProps> = ({ tour }) => {
           <div className=" text-black">
             <span className="font-bold font-english text-lg md:text-xl">
               {" "}
-              {tour?.priceDoubleSa}
+              {tour?.priceDoubleJo}
             </span>{" "}
             <span className="font-primary text-black text-sm">د.أ</span>
           </div>
@@ -36,7 +36,7 @@ const TourInitailInfo: FunctionComponent<TourInitailInfoProps> = ({ tour }) => {
           <div className=" text-black">
             <span className="font-bold font-english text-lg md:text-xl">
               {" "}
-              {tour?.priceSingleSa}
+              {tour?.priceSingleJo}
             </span>{" "}
             <span className="font-primary text-black text-sm">د.أ</span>
           </div>
